@@ -198,7 +198,7 @@
             var list = lists[i + j]
             div.innerHTML = `
                 <div class="card-body">
-                            <a class="card-title pd-2 text-primary" href="/${list.doc_number}">${list.title}</a>
+                            <a class="card-title pd-2 text-primary" href="/search/${list.doc_number}">${list.title}</a>
                             <img src="${ list.thumbnail}" class="card-img-right float-left" alt="..." width="96">
                             <h6 class="card-text text-success">${ list.url}</h6>
                             <h6 class="h6 text-muted" style="font-size: 12px;">${ list.publish_date}</h6>
@@ -275,17 +275,19 @@
     pageinate(1);
 </script>
 <script>
+    var words = {{ query | safe }}
+    for(var i=0;i<words.length;i++){
+        if (window.find && window.getSelection) {
+            document.designMode = "on";
+            var sel = window.getSelection();
+            sel.collapse(document.body, 0);
 
-    if (window.find && window.getSelection) {
-        document.designMode = "on";
-        var sel = window.getSelection();
-        sel.collapse(document.body, 0);
-
-        while (window.find("{{ query }}")) {
-            document.execCommand("HiliteColor", false, "yellow");
-            sel.collapseToEnd();
+            while (window.find(words[i])) {
+                document.execCommand("HiliteColor", false, "yellow");
+                sel.collapseToEnd();
+            }
+            document.designMode = "off";
         }
-        document.designMode = "off";
     }
     window.scrollTo(0,0);
 </script>

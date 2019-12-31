@@ -5,8 +5,6 @@ from . import searchclass
 import time
 import simplejson as json
 NORESULT = "Nothing ..."
-TIME=0
-
 def homepage(request):
     return render(request, 'home.html')
 
@@ -16,11 +14,9 @@ def search(request):
     query=request.GET['search']
     qu = searchclass.Query(query)
     docids = qu.final_results()
-    but_num=len(docids)/10
-    but_num=int(but_num) + 1
-    butts=[]
-    for i in range(but_num):
-        butts.append(i + 1)
+    #Change Query list here!
+    query_list=["سلام","محمد","تهران"]
+    query_list=json.dumps(query_list)
     results = ss.query(docids)
     for key in results:
         key['doc_number'] = int(key['doc_number'])
@@ -29,8 +25,7 @@ def search(request):
         info = f"Found {len(docids)} results in {(1)/10**6 } miliseconds"
     else:
         info = NORESULT
-    print(results[0])
-    return render(request, 'search.html', {'lists': json.dumps(results), 'info' : info,'query':query,'buttons':butts})
+    return render(request, 'search.html', {'lists': json.dumps(results), 'info' : info,'query':query_list})
 
 # def viewresults(request):
 
@@ -38,4 +33,5 @@ def search(request):
 
 def func(request, id):
     temp=ss.urls[id-1]
-    return render(request, 'content.html', {'list': temp})
+    print(query_list)
+    return render(request, 'content.html', {'list': temp,'query':query_list})

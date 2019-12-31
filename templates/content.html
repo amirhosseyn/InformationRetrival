@@ -217,15 +217,20 @@
 
 
 <script>
-  if (window.find && window.getSelection) {
-    document.designMode = "on";
-    var sel = window.getSelection();
-    sel.collapse(document.body, 0);
+     var words = {{ query | safe }}
+    for(var i=0;i<words.length;i++){
+        if (window.find && window.getSelection) {
+            document.designMode = "on";
+            var sel = window.getSelection();
+            sel.collapse(document.body, 0);
 
-    while (window.find("{{ query }}")) {
-      document.execCommand("HiliteColor", false, "yellow");
-      sel.collapseToEnd();
+            while (window.find(words[i])) {
+                document.execCommand("HiliteColor", false, "yellow");
+                sel.collapseToEnd();
+            }
+            document.designMode = "off";
+        }
     }
-    document.designMode = "off";
-  }</script>
+    window.scrollTo(0,0);
+</script>
 </html>
